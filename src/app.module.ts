@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { UsersModule } from './users/users.module';
 import { ChatBotModule } from './chat-bot/chat-bot.module';
+import { ManageChatBotModule } from './manage-chat-bot/manage-chat-bot.module'
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ChatBotModule } from './chat-bot/chat-bot.module';
     }),
     UsersModule,
     ChatBotModule,
+    ManageChatBotModule
   ],
   controllers: [AppController],
   providers: [AppService],

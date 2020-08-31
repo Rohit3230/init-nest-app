@@ -37,6 +37,16 @@ export class ChatBotController {
     return this.chatBotService.findOne(id);
   }
 
+  // @Get('getoptions/getChatAns')
+  // getQuesAns(): Promise<ChatBot[]> {
+  //   return this.chatBotService.findAll(); 
+  // }
+
+  // @Get('getchatquesans/:id')
+  // getQuesAnsByQuesID(@Param('id') quesId: string): Promise<ChatBot> {
+  //   return this.chatBotService.findQuesAns(quesId); 
+  // }
+
   @Put(':id')
   update(@Param('id') id: string, @Body() chatBotDto: ChatBotDto): Promise<ChatBot> {
     return this.chatBotService.update(id, chatBotDto);

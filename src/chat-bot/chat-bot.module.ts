@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChatBot } from './chat-bot.entity';
 import { ChatBotController } from './chat-bot.controller';
 import { ChatBotService } from './chat-bot.service';
+// import { ManageChatBotModule } from './manage-chat-bot/manage-chat-bot.module'
 
 // @Module({
 //   controllers: [ChatBotController],

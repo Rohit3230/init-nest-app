@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { ChatBotDto } from './dto/chat-bot';
 import { ChatBot } from './chat-bot.entity';
-import { serialize } from 'v8';
+// import { serialize } from 'v8';
 
 @Injectable()
 export class ChatBotService {
@@ -43,4 +43,15 @@ export class ChatBotService {
       async remove(id : string) : Promise<void>{
         await this.chatBotRepository.delete(id);
       }
+
+      // async findQuesAns(quesId:string) : Promise<ChatBot>{
+      //   // return await this.chatBotRepository.query("SELECT * FROM `users`", { type: sequelize.QueryTypes.SELECT})
+      //   // .then(results => {
+      //   //   console.log('Results***', results);
+      //   // })
+      //   // return await this.chatBotRepository.createQueryBuilder("SELECT * FROM `users`")
+      //   // .then(results => {
+      //   //   console.log('Results***', results);
+      //   // });
+      // }
 }
