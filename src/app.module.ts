@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { UsersModule } from './users/users.module';
+import { ChatBotModule } from './chat-bot/chat-bot.module';
 
 @Module({
   imports: [
@@ -16,9 +17,10 @@ import { UsersModule } from './users/users.module';
       database: 'NvlR1F3wgJ',
       entities: [],  
       // synchronize: true,
-      autoLoadEntities: true,
+      autoLoadEntities: true, 
     }),
     UsersModule,
+    ChatBotModule,
   ],
   controllers: [AppController],
   providers: [AppService],
