@@ -1,0 +1,71 @@
+<!-- <html>
+  <head>
+    <script>
+      const socket = new WebSocket('ws://localhost:3230');
+      socket.onopen = function() {
+        console.log('Connected');
+        socket.send(
+          JSON.stringify({
+            event: 'events',
+            data: {id:'init'},
+          }),
+        );
+        socket.onmessage = function(data) {
+          console.log(data);
+        };
+      };
+
+    function myFunction() {
+        // document.getElementById("demo").innerHTML = "Hello World";
+        var inputVal = document.getElementById("quesId").value;
+        debugger;
+        socket.send(
+          JSON.stringify({
+            event: 'events',
+            data: {id:inputVal},
+          }),
+        );
+    } 
+    </script>
+  </head> 
+  <body></body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html>
+    <script src="./angular.min.js"></script>
+<body>
+
+<div ng-app="myApp" ng-controller="myCtrl">
+    <div ng-if="dataArr && dataArr.length">
+        <ul>
+            <li ng-repeat="dataObj in dataArr">
+                <p>{{dataObj.data}}</p>
+                <!-- <button></button> -->
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+    const socket = new WebSocket('ws://localhost:3230');
+      socket.onopen = function() {
+        console.log('Connected');
+        socket.send(
+          JSON.stringify({
+            event: 'events',
+            data: {id:'init'},
+          }),
+        );
+        socket.onmessage = function(data) {
+          console.log(data);
+        };
+      };
+});
+</script>
+
+</body>
+</html>
