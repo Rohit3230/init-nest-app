@@ -1,71 +1,59 @@
-<!-- <html>
-  <head>
-    <script>
-      const socket = new WebSocket('ws://localhost:3230');
-      socket.onopen = function() {
-        console.log('Connected');
-        socket.send(
-          JSON.stringify({
-            event: 'events',
-            data: {id:'init'},
-          }),
-        );
-        socket.onmessage = function(data) {
-          console.log(data);
-        };
-      };
-
-    function myFunction() {
-        // document.getElementById("demo").innerHTML = "Hello World";
-        var inputVal = document.getElementById("quesId").value;
-        debugger;
-        socket.send(
-          JSON.stringify({
-            event: 'events',
-            data: {id:inputVal},
-          }),
-        );
-    } 
-    </script>
-  </head> 
-  <body></body>
-</html> -->
-
-
 <!DOCTYPE html>
 <html>
-    <script src="./angular.min.js"></script>
+<script src="./angular.min.js"></script>
+<script src="./angular-sanitize.js"></script>
+
 <body>
 
-<div ng-app="myApp" ng-controller="myCtrl">
+  <div ng-app="myApp" ng-controller="myCtrl">
     <div ng-if="dataArr && dataArr.length">
-        <ul>
-            <li ng-repeat="dataObj in dataArr">
-                <p>{{dataObj.data}}</p>
-                <!-- <button></button> -->
-            </li>
-        </ul>
+      <ul>
+        <li ng-repeat="dataObj in dataArr">
+          <p ng-bind-html="dataObj.data"></p>
+          <button ng-show="dataObj.type == 'link'" type="btn" class="btn" ng-click="selectQues(dataObj)">Select</button>
+        </li>
+      </ul>
     </div>
-</div>
+  </div>
 
-<script>
-var app = angular.module('myApp', []);
-app.controller('myCtrl', function($scope) {
-    const socket = new WebSocket('ws://localhost:3230');
-      socket.onopen = function() {
+  <script>
+    var app = angular.module('myApp', ['ngSanitize']);
+    app.controller('myCtrl', function ($scope, $timeout) {
+      $scope.name = 'Rohit';
+      $scope.dataArr = [];
+
+      $scope.selectQues = function (quesObj) {
+
+        socket.send(
+          JSON.stringify({
+            event: 'events',
+            data: { id: quesObj._id },
+          }),
+        );
+
+      };
+
+
+      $scope.count = 0;
+
+      const socket = new WebSocket('ws://localhost:3230');
+      socket.onopen = function () {
         console.log('Connected');
         socket.send(
           JSON.stringify({
             event: 'events',
-            data: {id:'init'},
+            data: { id: 'init' },
           }),
         );
-        socket.onmessage = function(data) {
-          console.log(data);
+        socket.onmessage = function (data) {
+          $timeout(function () {
+            $scope.dataArr = JSON.parse(data.data);
+          }, 1);
         };
       };
-});
-</script>
+    });
+  </script>
 
 </body>
+
 </html>

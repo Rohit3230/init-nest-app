@@ -11,6 +11,5 @@ import { Content, ContentSchema } from './schemas/content.schema';
   providers: [
     ContentsService
   ],
-  // exports : [ContentsService],
 })
 export class ContentsModule {}

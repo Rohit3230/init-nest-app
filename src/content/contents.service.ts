@@ -24,10 +24,7 @@ export class ContentsService {
 
   async findRelated(parentId): Promise<Content[]>{
     console.log('INIT getContent***2*', parentId);
-    return this.contentModel.find({ 'parentId' : parentId  })
-    // .exec((err, result) => {
-    //   console.log('Data Received****',err, result);
-    // });
+    return this.contentModel.find({ 'parentId' : parentId  });
   }
 }
 

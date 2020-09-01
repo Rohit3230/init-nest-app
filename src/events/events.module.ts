@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
-import { EventsGateway } from './events.gateway';
-// import { HitAPIService } from './hitApiService';
-import { ContentsService } from '../content/contents.service';
-import { ContentsModule } from '../content/contents.module';
-import { Content } from '../content/schemas/content.schema';
+import { EventsGateway } from './events.gateway'; 
+import { ContentsService } from '../content/contents.service'; 
+import { Content, ContentSchema } from '../content/schemas/content.schema';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  // imports : [Content],
-  providers: [EventsGateway],
+  imports: [
+    MongooseModule.forFeature([{ name: Content.name, schema: ContentSchema }]),
+  ],
+  providers: [EventsGateway, ContentsService],
 })
 export class EventsModule {}
