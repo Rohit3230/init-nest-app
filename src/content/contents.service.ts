@@ -18,6 +18,11 @@ export class ContentsService {
     return createdContent.save();
   }
 
+  async update(createContentDto:CreateContentDto):Promise<Content> {
+    const createdContent = new this.contentModel(createContentDto);
+    return createdContent.save();
+  }
+
   async findAll(): Promise<Content[]> {
     return this.contentModel.find().exec();
   }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Res, HttpStatus, Param } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, HttpStatus, Param, Put } from '@nestjs/common';
 import { ContentsService } from './contents.service';
 import { CreateContentDto } from './dto/create-content.dto';
 import { Content } from './schemas/content.schema';
@@ -10,6 +10,21 @@ export class ContentsController {
   @Post()
   async create(@Res() res, @Body() createCatDto: CreateContentDto) {
     await this.contentsService.create(createCatDto).then((result)=>{
+        res.status(HttpStatus.OK).json({
+            message: "OK",
+            result: result ? result : []
+        });
+    }).catch((err)=>{
+        res.status(HttpStatus.BAD_REQUEST).json({
+            message: "NOK",
+            result: err
+        });
+    });
+  }
+
+  @Put()
+  async update(@Res() res, @Body() createCatDto: CreateContentDto) {
+    await this.contentsService.update(createCatDto).then((result)=>{
         res.status(HttpStatus.OK).json({
             message: "OK",
             result: result ? result : []
