@@ -26,7 +26,7 @@ export class AppController {
     return this.appService.getHello();
   }
  
-  @Post(:type)
+  @Post()
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
