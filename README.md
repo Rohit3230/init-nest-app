@@ -140,3 +140,9 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
     Use command:
 <br>
     npm run start:dev
+
+
+**************************************
+Tutorial for fileUpload by multer:-
+https://gabrieltanner.org/blog/nestjs-file-uploading-using-multer
+**************************************

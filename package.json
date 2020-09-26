@@ -23,16 +23,22 @@
   "dependencies": {
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
-    "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/platform-express": "^7.4.4",
+    "node-tesseract": "^0.2.7",
+    "node-tesseract-ocr": "^2.0.0",
     "reflect-metadata": "^0.1.13",
+    "rewire": "^5.0.0",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.5.4"
+    "rxjs": "^6.5.4",
+    "tape": "^5.0.1",
+    "tesseract.js": "^1.0.19",
+    "textract": "^2.5.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.0.0",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",
-    "@types/express": "^4.17.3",
+    "@types/express": "^4.17.8",
     "@types/jest": "25.2.3",
     "@types/node": "^13.9.1",
     "@types/supertest": "^2.0.8",
