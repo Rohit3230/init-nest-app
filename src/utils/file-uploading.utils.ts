@@ -6,7 +6,6 @@ export const imageFileFilter = (req, file, callback) => {
     }
     callback(null, true);
   };
-  
 
   export const editFileName = (req, file, callback) => {
     const name = file.originalname.split('.')[0];
@@ -17,4 +16,3 @@ export const imageFileFilter = (req, file, callback) => {
       .join('');
     callback(null, `${name}-${randomName}${fileExtName}`);
   };
-  
