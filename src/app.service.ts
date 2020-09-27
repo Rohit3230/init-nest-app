@@ -1,7 +1,14 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 var fs = require('fs');
 const tesseract = require("node-tesseract-ocr");
-import { getCheckData, getAadharData, getPanData, getPassportData, getDrivingLicenceData } from './utils/extract-OCR.util';
+import { 
+          getCheckData,
+          getAadharData,
+          getPanData,
+          getPassportData,
+          getDrivingLicenceData,
+          validatedExtractedData
+        } from './utils/extract-OCR.util';
 
 @Injectable()
 export class AppService {
@@ -55,7 +62,7 @@ export class AppService {
         readStream.on('data', function (chunk) {
           data += chunk;
         }).on('end', function () {
-          
+
           let linesArray = data.split('\n');
           let responseObj : any;
           switch (fileType) {
@@ -81,8 +88,9 @@ export class AppService {
 
               break;
           }
+          responseObj = validatedExtractedData(responseObj);
           if(
-            responseObj.doesAllValueFound
+            responseObj.isValidated
           ){
             res.status(HttpStatus.OK).json({
               status: "OK",

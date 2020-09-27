@@ -1,6 +1,6 @@
 export const getCheckData = function(linesArray: any): any {
     console.log('INIT util fun getCheckData***', linesArray);
-    let reqObj : any = {ifsc:null, accNum:null, bankName:null,doesAllValueFound : false};
+    let reqObj : any = {ifsc:null, accNum:null, bankName:null};
     for(var i = 0; i<= linesArray.length-1;i++){
       if(
         (linesArray[i].toLowerCase()).indexOf('ifsc') != -1
@@ -14,7 +14,6 @@ export const getCheckData = function(linesArray: any): any {
           reqObj.bankName = linesArray[i];
       }
     }
-    reqObj.doesAllValueFound = true;
     console.log('reqObj***',reqObj);
     return reqObj;
   };
@@ -27,8 +26,7 @@ export const getCheckData = function(linesArray: any): any {
       aadharNumber: null,
       gender: null,
       dob: null,
-      name: null,
-      doesAllValueFound : false
+      name: null
     };
     for (var i = 0; i <= linesArray.length - 1; i++) {
       var currentWordsLine = linesArray[i];
@@ -97,24 +95,13 @@ export const getCheckData = function(linesArray: any): any {
       }
     }
 
-    if(
-      reqObj.aadharNumber
-      &&
-      reqObj.gender
-      &&
-      reqObj.dob
-      &&
-      reqObj.name
-    ){
-      reqObj.doesAllValueFound = true;
-    }
     console.log('reqObj****', reqObj);
     return reqObj;
   }
 
   export const  getPanData = function (linesArray: any): any {
     console.log('INIT getPanData***', linesArray, linesArray.length);
-    var reqObj: any = { name: null, fatherName: null, panNumber: null, dob: null, doesAllValueFound : false };
+    var reqObj: any = { name: null, fatherName: null, panNumber: null, dob: null };
     var indexOfLineContainsINDIA , indexOfLineContainsNUMBER;
     for (var i = 0; i <= linesArray.length - 1; i++) {
       if(
@@ -194,34 +181,43 @@ export const getCheckData = function(linesArray: any): any {
           }
     }
 
-    if(
-      reqObj.name
-      &&
-      reqObj.fatherName
-      &&
-      reqObj.panNumber
-      &&
-      reqObj.dob
-    ){
-      reqObj.doesAllValueFound = true;
-    }
-
     console.log('reqObj***',reqObj);
     return reqObj;
   } 
 
   export const  getPassportData = function(linesArray: any): any {
     console.log('INIT getPassportData***', linesArray);
-    let reqObj : any = {ifsc:null, accNum:null, bankName:null,doesAllValueFound : false};
-    reqObj.doesAllValueFound = true;
+    let reqObj : any = {ifsc:null, accNum:null, bankName:null};
     console.log('reqObj***',reqObj);
     return reqObj;
   }
 
   export const  getDrivingLicenceData = function(linesArray: any): any {
     console.log('INIT getDrivingLicenceData***', linesArray);
-    let reqObj : any = {ifsc:null, accNum:null, bankName:null,doesAllValueFound : false};
-    reqObj.doesAllValueFound = true;
+    let reqObj : any = {ifsc:null, accNum:null, bankName:null};
     console.log('reqObj***',reqObj);
+    return reqObj;
+  }
+
+  export const validatedExtractedData = function(reqObj:any){
+    console.log('INIT validatedExtractedData**1**', reqObj);
+
+    (Object.keys(reqObj)).forEach(function(keyName){
+      if(
+        !reqObj[keyName]
+      ){
+        reqObj.isValidated = false;
+      }
+    });
+
+    console.log('isValidated***',(reqObj).hasOwnProperty('isValidated'));
+
+    if(
+      (reqObj).hasOwnProperty('isValidated') == false
+    ){
+      reqObj.isValidated = true;
+    }
+
+    console.log('INIT validatedExtractedData**2**', reqObj);
     return reqObj;
   }
