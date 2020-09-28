@@ -36,9 +36,11 @@ export class AppService {
     ) {
 
       let reqFileNameForOCR = file.path;
+      // reqFileNameForOCR = 'src\\aadhara.jpg';
+      // tesseract "src\\aadhara.jpg" stdout --oem 1 --psm 3
 
       const config = {
-        lang: "eng+hin",
+        // lang: "eng+hin",
         oem: 1,
         psm: 3,
       }
