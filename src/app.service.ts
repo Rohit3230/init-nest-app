@@ -94,15 +94,18 @@ export class AppService {
           if(
             responseObj.isValidated
           ){
+            delete responseObj.isValidated;
             res.status(HttpStatus.OK).json({
               status: "OK",
               message: "OK",
               result: responseObj
             });
           }else{
+            delete responseObj.isValidated;
             res.status(HttpStatus.BAD_REQUEST).json({
               status: "BAD_REQUEST",
-              message: 'Not getting values from uploaded '+fileType+'. It can be invalid file. Please check and upload again.'
+              message: 'Not getting values from uploaded '+fileType+'. It can be invalid file. Please check and upload again.',
+              result: responseObj
             });
           }
         });
