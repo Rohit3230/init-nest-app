@@ -40,20 +40,20 @@ export class AppService {
       // tesseract "src\\aadhara.jpg" stdout --oem 1 --psm 3
 
       const config = {
-        // lang: "eng+hin",
+        lang: "eng+hin",
         oem: 1,
         psm: 3,
       }
 
-      console.log('tesseract***',tesseract);
+      // console.log('tesseract***',tesseract);
 
-      tesseract.recognize(reqFileNameForOCR, config)
-        .then(text => {
-          console.log("1 Result:", text);
-        })
-        .catch(error => {
-          console.log("1 error:",error.message);
-        });
+      // tesseract.recognize(reqFileNameForOCR, config)
+      //   .then(text => {
+      //     console.log("1 Result:", text);
+      //   })
+      //   .catch(error => {
+      //     console.log("1 error:",error.message);
+      //   });
 
       let callMe = async function () {
         const result = await tesseract.recognize(reqFileNameForOCR, config);
@@ -88,15 +88,18 @@ export class AppService {
           if(
             responseObj.isValidated
           ){
+            delete responseObj.isValidated;
             res.status(HttpStatus.OK).json({
               status: "OK",
               message: "OK",
               result: responseObj
             });
           }else{
+            delete responseObj.isValidated;
             res.status(HttpStatus.BAD_REQUEST).json({
               status: "BAD_REQUEST",
-              message: 'Not getting values from uploaded '+fileType+'. It can be invalid file. Please check and upload again.'
+              message: 'Not getting all reuired values from uploaded '+fileType+'. It can be invalid file. Please check and upload again.',
+              result: responseObj
             });
           }
 

@@ -1,17 +1,77 @@
+let isEveryCharOfStringIsDigit = function(charString:string) {
+  console.log('INIT isEveryCharOfStringIsDigit****');
+  return true;
+  // for(var i=0; i<= charString.length-1 ; i++){
+    
+  // }
+}
+
+// let getOnlyDigitString : any = function(charString:string) {
+//   console.log('INIT getOnlyDigitString****', charString);
+//   var digitString = '';
+//   var iteratedLength = 0;
+//   do while(iteratedLength < charString.length){
+//     if(
+//       charString[iteratedLength]
+//       &&
+//       Number(charString[iteratedLength])
+//     ){
+//       digitString = digitString+charString[iteratedLength];
+//     }
+//   }
+//   return digitString;
+// }
+
 export const getCheckData = function(linesArray: any): any {
     console.log('INIT util fun getCheckData***', linesArray);
     let reqObj : any = {ifsc:null, accNum:null, bankName:null};
     for(var i = 0; i<= linesArray.length-1;i++){
       if(
-        (linesArray[i].toLowerCase()).indexOf('ifsc') != -1
+        !reqObj.ifsc
+        &&
+        //(
+          (linesArray[i].toLowerCase()).indexOf('ifsc') != -1
+          // ||
+          // (linesArray[i].toLowerCase()).indexOf('fsc') != -1
+          //)
       ){
-          var ifscData = linesArray[i].split('IFSC : ');
-          reqObj.ifsc = ifscData[1].split(' ')[0];
+        console.log('linesArray[i].replace****',linesArray[i].replace(/ /g, ''))
+          var ifscData = (linesArray[i].replace(/ /g, '')).split('IFSC:');
+          ifscData && ifscData[1] ? reqObj.ifsc = ifscData[1].split(' ')[0] : '';
       }
+
       if(
+        !reqObj.bankName
+        &&
         (linesArray[i].toLowerCase()).indexOf('bank') != -1
       ){
           reqObj.bankName = linesArray[i];
+      }
+
+
+      //console.log('linesArray[i]****', linesArray[i] , linesArray[i].length);
+      if(
+        !reqObj.accNum
+        &&
+        linesArray[i]
+        &&
+        (linesArray[i]).length > 9
+      ){
+        //console.log('(linesArray[i]).split(' ')***',(linesArray[i]).split(' '),  (linesArray[i]).split(' ').length);
+        for(var j=0; j<= (linesArray[i]).split(' ').length-1; j++ ){
+          //console.log('(linesArray[i]).split(' ')[j]***',(linesArray[i]).split(' ')[j], (linesArray[i]).split(' ')[j].length, !isNaN(Number((linesArray[i]).split(' ')[j])));
+            if(
+              ((linesArray[i]).split(' ')[j]).length >= 9
+              &&
+              ((linesArray[i]).split(' ')[j]).length <= 18
+              &&
+              !isNaN(Number((linesArray[i]).split(' ')[j]))
+              &&
+              !reqObj.accNum
+            ){
+              reqObj.accNum = (linesArray[i]).split(' ')[j];
+            }
+          }
       }
     }
     console.log('reqObj***',reqObj);
@@ -68,7 +128,9 @@ export const getCheckData = function(linesArray: any): any {
           &&
           !reqObj.name
         ) {
-          reqObj.name = linesArray[i - 1];
+          linesArray[i - 1] && (linesArray[i - 1]).replace(/ /g, '') != '' ? reqObj.name = linesArray[i - 1] : '';
+          linesArray[i - 2] && (linesArray[i - 2]).replace(/ /g, '') != '' ? reqObj.name = linesArray[i - 2] : '';
+          linesArray[i - 3] && (linesArray[i - 3]).replace(/ /g, '') != '' ? reqObj.name = linesArray[i - 3] : '';
         }
       }
       if (
@@ -79,19 +141,50 @@ export const getCheckData = function(linesArray: any): any {
         currentWordsLine.length > 12
       ) {
         // check for aadhar number.
-        if (
-          currentWordsLine.length == 14
-          &&
-          currentWordsLine.split(' ').length == 3
-          &&
-          currentWordsLine.split(' ')[0].length == 4
-          &&
-          currentWordsLine.split(' ')[1].length == 4
-          &&
-          currentWordsLine.split(' ')[1].length == 4
-        ) {
-          reqObj.aadharNumber = currentWordsLine;
+        // var accNumContainStringArr = currentWordsLine.split(' ');
+        // console.log('currentWordsLine***',currentWordsLine);
+        var iteration = 0;
+        var adharNumString = '';
+        for(var j=0; j<=currentWordsLine.split(' ').length-1; j++){
+          if(
+            currentWordsLine.split(' ')[j]
+            &&
+            currentWordsLine.split(' ')[j].length
+            &&
+            currentWordsLine.split(' ')[j].length == 4
+            &&
+            !isNaN(currentWordsLine.split(' ')[j])
+          ){
+            iteration = iteration+1;
+            adharNumString = adharNumString+(adharNumString ? ' ' : '')+currentWordsLine.split(' ')[j]
+          }else{
+            if(
+              iteration != 3
+            ){
+              iteration = 0;
+              adharNumString = ''; 
+            }
+          }
         }
+        if(
+          iteration = 3
+        ){
+          reqObj.aadharNumber = adharNumString;
+        }
+
+        // if (
+        //   currentWordsLine.length == 14
+        //   &&
+        //   currentWordsLine.split(' ').length == 3
+        //   &&
+        //   currentWordsLine.split(' ')[0].length == 4
+        //   &&
+        //   currentWordsLine.split(' ')[1].length == 4
+        //   &&
+        //   currentWordsLine.split(' ')[1].length == 4
+        // ) {
+        //   reqObj.aadharNumber = currentWordsLine;
+        // }
       }
     }
 
@@ -200,7 +293,7 @@ export const getCheckData = function(linesArray: any): any {
   }
 
   export const validatedExtractedData = function(reqObj:any){
-    console.log('INIT validatedExtractedData**1**', reqObj);
+    // console.log('INIT validatedExtractedData**1**', reqObj);
 
     (Object.keys(reqObj)).forEach(function(keyName){
       if(
@@ -210,7 +303,7 @@ export const getCheckData = function(linesArray: any): any {
       }
     });
 
-    console.log('isValidated***',(reqObj).hasOwnProperty('isValidated'));
+    // console.log('isValidated***',(reqObj).hasOwnProperty('isValidated'));
 
     if(
       (reqObj).hasOwnProperty('isValidated') == false
@@ -218,6 +311,6 @@ export const getCheckData = function(linesArray: any): any {
       reqObj.isValidated = true;
     }
 
-    console.log('INIT validatedExtractedData**2**', reqObj);
+    // console.log('INIT validatedExtractedData**2**', reqObj);
     return reqObj;
   }
