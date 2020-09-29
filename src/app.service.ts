@@ -45,27 +45,21 @@ export class AppService {
         psm: 3,
       }
 
-      // tesseract.recognize(reqFileNameForOCR, config)
-      //   .then(text => {
-      //     console.log("1 Result:", text);
-      //   })
-      //   .catch(error => {
-      //     console.log("1 error:",error.message);
-      //   });
+      console.log('tesseract***',tesseract);
+
+      tesseract.recognize(reqFileNameForOCR, config)
+        .then(text => {
+          console.log("1 Result:", text);
+        })
+        .catch(error => {
+          console.log("1 error:",error.message);
+        });
 
       let callMe = async function () {
         const result = await tesseract.recognize(reqFileNameForOCR, config);
         console.log('callMe function:- result:- ', result);
 
-        var data = '';
-
-        var readStream = fs.createReadStream('stdout.txt', 'utf8');
-
-        readStream.on('data', function (chunk) {
-          data += chunk;
-        }).on('end', function () {
-
-          let linesArray = data.split('\n');
+        let linesArray = result.split('\n');
           let responseObj : any;
           switch (fileType) {
             case 'aadhar':
@@ -105,7 +99,19 @@ export class AppService {
               message: 'Not getting values from uploaded '+fileType+'. It can be invalid file. Please check and upload again.'
             });
           }
-        });
+
+        // var data = ''; 
+
+        // var readStream = fs.createReadStream('stdout.txt', 'utf8');
+
+        // readStream.on('data', function (chunk) {
+        //   data += chunk;
+        //   console.log('data****',data);
+        //   data += chunk;
+        // }).on('end', function () {
+
+          
+        // });
 
       }
 
