@@ -40,7 +40,8 @@ export class AppService {
       // tesseract "src\\aadhara.jpg" stdout --oem 1 --psm 3
 
       const config = {
-        lang: "eng+hin",
+        lang: "eng",
+        // lang: "eng+hin",
         oem: 1,
         psm: 3,
       }

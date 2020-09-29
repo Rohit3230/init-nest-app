@@ -1,25 +1,9 @@
-let isEveryCharOfStringIsDigit = function(charString:string) {
-  console.log('INIT isEveryCharOfStringIsDigit****');
-  return true;
-  // for(var i=0; i<= charString.length-1 ; i++){
+// let isEveryCharOfStringIsDigit = function(charString:string) {
+//   console.log('INIT isEveryCharOfStringIsDigit****');
+//   return true;
+//   // for(var i=0; i<= charString.length-1 ; i++){
     
-  // }
-}
-
-// let getOnlyDigitString : any = function(charString:string) {
-//   console.log('INIT getOnlyDigitString****', charString);
-//   var digitString = '';
-//   var iteratedLength = 0;
-//   do while(iteratedLength < charString.length){
-//     if(
-//       charString[iteratedLength]
-//       &&
-//       Number(charString[iteratedLength])
-//     ){
-//       digitString = digitString+charString[iteratedLength];
-//     }
-//   }
-//   return digitString;
+//   // }
 // }
 
 export const getCheckData = function(linesArray: any): any {
@@ -35,9 +19,36 @@ export const getCheckData = function(linesArray: any): any {
           // (linesArray[i].toLowerCase()).indexOf('fsc') != -1
           //)
       ){
-        console.log('linesArray[i].replace****',linesArray[i].replace(/ /g, ''))
-          var ifscData = (linesArray[i].replace(/ /g, '')).split('IFSC:');
-          ifscData && ifscData[1] ? reqObj.ifsc = ifscData[1].split(' ')[0] : '';
+        // console.log('linesArray[i].replace****',linesArray[i].replace(/ /g, ''))
+        //   var ifscData = (linesArray[i].replace(/ /g, '')).split('IFSC:');
+        //   console.log('ifscData***',ifscData);
+        //   ifscData && ifscData[1] ? reqObj.ifsc = ifscData[1].split(' ')[0] : '';
+        console.log('linesArray[i].replace****',linesArray[i])
+        // var ifscData = linesArray[i].split(' ');
+        var ifscStrIndex = 0;
+        for(var j=0; j<= linesArray[i].split(' ').length-1; j++){
+          // console.log('sss**',linesArray[i].split(' ')[j]);
+          if(
+          ((linesArray[i].split(' ')[j]).toLowerCase()).indexOf('ifsc')
+          ){
+            ifscStrIndex = j;
+          }
+          if(
+            ifscStrIndex
+            &&
+            j+1 > ifscStrIndex
+            &&
+            linesArray[i].split(' ')[j].length
+            &&
+            linesArray[i].split(' ')[j].length > 5
+            &&
+            (linesArray[i].split(' ')[j]).indexOf('YYY') == -1
+          ){
+            reqObj.ifsc = linesArray[i].split(' ')[j];
+          }
+        }
+        // console.log('ifscData***',ifscData);
+        // ifscData && ifscData[1] ? reqObj.ifsc = ifscData[1].split(' ')[0] : '';
       }
 
       if(
@@ -270,7 +281,19 @@ export const getCheckData = function(linesArray: any): any {
             &&
             linesArray[i].length >= 10
           ) {
-            reqObj.panNumber = linesArray[i];
+            // var panNumString = (linesArray[i]).split(' ');
+            for(var j=0; j<=(linesArray[i]).split(' ').length-1 ; j++){
+              if(
+                !reqObj.panNumber
+                &&
+                (linesArray[i]).split(' ')[j]
+                &&
+                ((linesArray[i]).split(' ')[j]).length == 10
+              ){
+                reqObj.panNumber = (linesArray[i]).split(' ')[j];
+              }
+            }
+            // reqObj.panNumber = ;
           }
     }
 
