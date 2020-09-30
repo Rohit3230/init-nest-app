@@ -5,6 +5,13 @@
     
 //   // }
 // }
+let removeAllSpecialCharsFromSting = function(reqString:string){
+  
+  reqString = reqString.replace(/['"\u005B\u005D\u003B\u002C\u002C\u0040\u0026\u2122\u00ae\u007E\u0021\u0023\u0024\u0025\u002A\u005E\u0028\u0029\u002B\u007B\u007D\u003A\u003F\u003C\u003E\u201D\u201C]/g, '');
+
+  return reqString;
+}
+
 
 export const getCheckData = function(linesArray: any): any {
     console.log('INIT util fun getCheckData***', linesArray);
@@ -157,6 +164,7 @@ export const getCheckData = function(linesArray: any): any {
         var iteration = 0;
         var adharNumString = '';
         for(var j=0; j<=currentWordsLine.split(' ').length-1; j++){
+          //currentWordsLine.split(' ')[j] = removeAllSpecialCharsFromSting(currentWordsLine.split(' ')[j]);
           if(
             currentWordsLine.split(' ')[j]
             &&

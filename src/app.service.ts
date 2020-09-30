@@ -26,7 +26,6 @@ export class AppService {
     fileType = fileType.toLowerCase();   // convert to lowercase
 
     console.log('isSupported***', supportedFiles.indexOf(fileType) != -1);
-
     if (
       supportedFiles.indexOf(fileType) != -1
       &&
@@ -34,7 +33,6 @@ export class AppService {
       &&
       file.originalname
     ) {
-
       let reqFileNameForOCR = file.path;
       // reqFileNameForOCR = 'src\\aadhara.jpg';
       // tesseract "src\\aadhara.jpg" stdout --oem 1 --psm 3
