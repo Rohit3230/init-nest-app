@@ -16,7 +16,7 @@ export class AppService {
     return 'Hello World, This tutorial is for learning Nest.Js framework of NodeJs !';
   }
 
-  processDocData(res, fileType: string, file: any): any {
+  processDocData(res, fileType: string, files: any): any {
     // let response: any;
     let supportedFiles = ['aadhar', 'aadharcard', 'pan', 'pancard', 'drivinglicence', 'passport', 'check', 'cancelcheck'];
     if (!fileType) {
@@ -29,11 +29,13 @@ export class AppService {
     if (
       supportedFiles.indexOf(fileType) != -1
       &&
-      file
+      files
       &&
-      file.originalname
+      files[0]
+      &&
+      files[0].originalname
     ) {
-      let reqFileNameForOCR = file.path;
+      let reqFileNameForOCR = files[0].path;
       // reqFileNameForOCR = 'src\\aadhara.jpg';
       // tesseract "src\\aadhara.jpg" stdout --oem 1 --psm 3
 
@@ -53,12 +55,12 @@ export class AppService {
       //   .catch(error => {
       //     console.log("1 error:",error.message);
       //   });
-
-      let callMe = async function () {
-        const result = await tesseract.recognize(reqFileNameForOCR, config);
-        console.log('callMe function:- result:- ', result);
-
-        let linesArray = result.split('\n');
+      let filesDataArr= [];
+      let callMe = async function (files : any) {
+        for(const file of files){
+          const result = await tesseract.recognize(file.path, config);
+          console.log('callMe function:- result:- ', result);
+          let linesArray = result.split('\n');
           let responseObj : any;
           switch (fileType) {
             case 'aadhar':
@@ -83,6 +85,35 @@ export class AppService {
 
               break;
           }
+          filesDataArr.push(responseObj);
+        }
+
+      }
+
+      callMe(files)
+        .then(function (result) {
+          console.log('then filesDataArr***', filesDataArr);
+
+          let responseObj : any;
+          for(let fD = 0; fD<= filesDataArr.length-1;fD++){
+            !responseObj ? responseObj = filesDataArr[fD]:'';
+            if(
+              fD != 0 
+            ){
+              var fileData = filesDataArr[fD];
+              for(let fDKI=0; fDKI <= (Object.keys(fileData)).length-1;fDKI++){
+                let fileKeyName = (Object.keys(fileData))[fDKI];
+                if(
+                  fileData[fileKeyName]
+                  &&
+                  !responseObj[fileKeyName]
+                ){
+                  responseObj[fileKeyName] = fileData[fileKeyName];
+                }
+              }
+            }
+          }
+
           responseObj = validatedExtractedData(responseObj);
           if(
             responseObj.isValidated
@@ -102,24 +133,6 @@ export class AppService {
             });
           }
 
-        // var data = ''; 
-
-        // var readStream = fs.createReadStream('stdout.txt', 'utf8');
-
-        // readStream.on('data', function (chunk) {
-        //   data += chunk;
-        //   console.log('data****',data);
-        //   data += chunk;
-        // }).on('end', function () {
-
-          
-        // });
-
-      }
-
-      callMe()
-        .then(function (result) {
-          console.log('then result***', result);
         })
         .catch(error => console.log('catch error***', error));
     } else {

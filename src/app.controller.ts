@@ -37,10 +37,10 @@ export class AppController {
   )
   async uploadedFile(@Res() res, @Param('fileType') fileType: string, @UploadedFile() file) {
     console.log('file****', fileType, file);
-    return this.appService.processDocData(res, fileType, file);
+    return this.appService.processDocData(res, fileType, [file]);
   }
 
-  @Post('multiple')
+  @Post('multiple/:fileType')
   @UseInterceptors(
     FilesInterceptor('image', 20, {
       storage: diskStorage({
@@ -50,16 +50,18 @@ export class AppController {
       fileFilter: imageFileFilter,
     }),
   )
-  async uploadMultipleFiles(@UploadedFiles() files) {
-    const response = [];
-    files.forEach(file => {
-      const fileReponse = {
-        originalname: file.originalname,
-        filename: file.filename,
-      };
-      response.push(fileReponse);
-    });
-    return response;
+  async uploadMultipleFiles(@Res() res, @Param('fileType') fileType: string, @UploadedFiles() files) {
+    console.log('files****', fileType, files);
+    return this.appService.processDocData(res, fileType, files);
+    // const response = [];
+    // files.forEach(file => {
+    //   const fileReponse = {
+    //     originalname: file.originalname,
+    //     filename: file.filename,
+    //   };
+    //   response.push(fileReponse);
+    // });
+    // return response;
   }
 
 

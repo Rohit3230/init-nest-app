@@ -6,9 +6,11 @@
 //   // }
 // }
 let removeAllSpecialCharsFromSting = function(reqString:string){
-  
-  reqString = reqString.replace(/['"\u005B\u005D\u003B\u002C\u002C\u0040\u0026\u2122\u00ae\u007E\u0021\u0023\u0024\u0025\u002A\u005E\u0028\u0029\u002B\u007B\u007D\u003A\u003F\u003C\u003E\u201D\u201C]/g, '');
-
+    // console.log('INIT removeAllSpecialCharsFromSting***', reqString, typeof(reqString));
+  // reqString = reqString.replace(/['"\u005F\u005B\u005D\u003B\u002C\u002C\u0040\u0026\u2122\u00ae\u007E\u0021\u0023\u0024\u0025\u002A\u005E\u0028\u0029\u002B\u007B\u007D\u003A\u003F\u003C\u003E\u201D\u201C]/g, '');
+  // reqString = reqString.replace(/ /g, '');
+  reqString = reqString.replace(/[^a-zA-Z0-9]/g, '');
+  reqString = reqString.replace(/[&\/\\#,+()$~%.'":*?<>{}_]/g, '');
   return reqString;
 }
 
@@ -96,16 +98,17 @@ export const getCheckData = function(linesArray: any): any {
     return reqObj;
   };
 
-  export const  getAadharData = function (linesArray: any): any {
+  export const getAadharData = function (linesArray: any): any {
     console.log('INIT getAadharData***', linesArray);
-    // let linesArray = fileString.split('\n');
-    // console.log('linesArray**', linesArray);
+
     let reqObj: any = {
       aadharNumber: null,
       gender: null,
       dob: null,
-      name: null
+      name: null,
+      address:null
     };
+    var addressContainingStrInd;
     for (var i = 0; i <= linesArray.length - 1; i++) {
       var currentWordsLine = linesArray[i];
       if (
@@ -164,18 +167,21 @@ export const getCheckData = function(linesArray: any): any {
         var iteration = 0;
         var adharNumString = '';
         for(var j=0; j<=currentWordsLine.split(' ').length-1; j++){
-          //currentWordsLine.split(' ')[j] = removeAllSpecialCharsFromSting(currentWordsLine.split(' ')[j]);
+
+          var reqAadharStr = currentWordsLine.split(' ')[j];
+          reqAadharStr = removeAllSpecialCharsFromSting(reqAadharStr);
+
           if(
-            currentWordsLine.split(' ')[j]
+            reqAadharStr
             &&
-            currentWordsLine.split(' ')[j].length
+            reqAadharStr.length
             &&
-            currentWordsLine.split(' ')[j].length == 4
+            reqAadharStr.length == 4
             &&
-            !isNaN(currentWordsLine.split(' ')[j])
+            !isNaN(reqAadharStr)
           ){
             iteration = iteration+1;
-            adharNumString = adharNumString+(adharNumString ? ' ' : '')+currentWordsLine.split(' ')[j]
+            adharNumString = adharNumString+(adharNumString ? ' ' : '')+reqAadharStr
           }else{
             if(
               iteration != 3
@@ -190,20 +196,42 @@ export const getCheckData = function(linesArray: any): any {
         ){
           reqObj.aadharNumber = adharNumString;
         }
+      }
+      
+      if(
+        !reqObj.address
+        &&
+        !addressContainingStrInd
+        &&
+        (currentWordsLine.toLowerCase()).indexOf('address') != -1
+      ){
+        addressContainingStrInd = i;
+      }
+      if(
+        addressContainingStrInd
+        &&
+        i >= addressContainingStrInd+1
+        // &&
+        // !reqObj.address
+      ){
+        // !reqObj.address ? reqObj.address = '' : '';
+        if(
+          currentWordsLine
+          &&
+          (currentWordsLine.replace(/ /g, '')).length
+        ){
+          reqObj.address = (reqObj.address ? reqObj.address+'\n' : '')+''+currentWordsLine;
+        }
 
-        // if (
-        //   currentWordsLine.length == 14
-        //   &&
-        //   currentWordsLine.split(' ').length == 3
-        //   &&
-        //   currentWordsLine.split(' ')[0].length == 4
-        //   &&
-        //   currentWordsLine.split(' ')[1].length == 4
-        //   &&
-        //   currentWordsLine.split(' ')[1].length == 4
-        // ) {
-        //   reqObj.aadharNumber = currentWordsLine;
-        // }
+        if(
+          currentWordsLine
+          &&
+          currentWordsLine.length
+          &&
+          currentWordsLine.length == 6
+        ){
+          addressContainingStrInd = 0;
+        }
       }
     }
 
