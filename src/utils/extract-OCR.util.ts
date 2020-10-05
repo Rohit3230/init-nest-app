@@ -108,7 +108,8 @@ export const getCheckData = function(linesArray: any): any {
       name: null,
       address:null
     };
-    var addressContainingStrInd;
+    var addressContainingStrInd : number;
+    var fullImgAddressContainingStrInd : number;
     for (var i = 0; i <= linesArray.length - 1; i++) {
       var currentWordsLine = linesArray[i];
       if (
@@ -233,6 +234,50 @@ export const getCheckData = function(linesArray: any): any {
           addressContainingStrInd = 0;
         }
       }
+
+      
+      if(
+        !reqObj.address
+        &&
+        !addressContainingStrInd
+        &&
+        !fullImgAddressContainingStrInd
+        &&
+        (
+          currentWordsLine
+          &&
+          currentWordsLine == 'To'
+        )
+      ){
+        fullImgAddressContainingStrInd = i;
+      }
+      // console.log('fullImgAddressContainingStrInd***',fullImgAddressContainingStrInd);
+      if(
+        fullImgAddressContainingStrInd
+        &&
+        i >= fullImgAddressContainingStrInd+1
+      ){
+        if(
+          currentWordsLine
+          &&
+          (currentWordsLine.replace(/ /g, '')).length
+          // &&
+          // (currentWordsLine.replace(/ /g, '')).length != 10
+        ){
+          reqObj.address = (reqObj.address ? reqObj.address+'\n' : '')+''+currentWordsLine;
+
+          currentWordsLine = removeAllSpecialCharsFromSting(currentWordsLine);
+          if(
+            !isNaN(currentWordsLine)
+            &&
+            currentWordsLine.length == 10
+          ){
+            fullImgAddressContainingStrInd = 0;
+          }
+        }
+
+      }
+      // console.log('fullImgAddressContainingStrInd****',fullImgAddressContainingStrInd);
     }
 
     console.log('reqObj****', reqObj);
