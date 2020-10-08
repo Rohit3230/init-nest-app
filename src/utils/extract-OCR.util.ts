@@ -373,11 +373,11 @@ export const getPanData = function (linesArray: any): any {
       (linesArray[i].toLowerCase()).indexOf('number') != -1
     ) {
       indexOfLineContainsNUMBER = i;
-
+      console.log('Check***',reqObj.dob,  doesStringContainingAnyDate(linesArray[i-1]));
       if (
         !reqObj.dob &&
         linesArray[i - 1] &&
-        (removeAllSpecialCharsFromSting(linesArray[i-1])).length > 7
+        (removeAllSpecialCharsFromSting(linesArray[i-1])).length
         &&
         doesStringContainingAnyDate(linesArray[i-1])
         ) {
@@ -417,7 +417,14 @@ export const getPanData = function (linesArray: any): any {
       (removeAllSpecialCharsFromSting(linesArray[i])).length > 7
       &&
       doesStringContainingAnyDate(linesArray[i])
+      &&
+      (linesArray[i+1].toLowerCase()).indexOf('number') == -1
+      &&
+      (linesArray[i+2].toLowerCase()).indexOf('number') == -1
+      &&
+      (linesArray[i+3].toLowerCase()).indexOf('number') == -1
     ){
+      console.log('***4***')
       reqObj.dob = doesStringContainingAnyDate(linesArray[i]);
     }
 
@@ -529,6 +536,14 @@ export const getPanData = function (linesArray: any): any {
       !reqObj.fatherName && linesArray[i+1] && removeAllSpecialCharsFromSting(linesArray[i+1]) ? reqObj.fatherName = linesArray[i+1] : '';
       !reqObj.fatherName && linesArray[i+2] && removeAllSpecialCharsFromSting(linesArray[i+2]) ? reqObj.fatherName = linesArray[i+2] : '';
       !reqObj.fatherName && linesArray[i+3] && removeAllSpecialCharsFromSting(linesArray[i+3]) ? reqObj.fatherName = linesArray[i+3] : '';
+
+      if(
+        !reqObj.name
+      ){
+        !reqObj.name && linesArray[i-1] && removeAllSpecialCharsFromSting(linesArray[i-1]) ? reqObj.name = linesArray[i-1] : '';
+        !reqObj.name && linesArray[i-2] && removeAllSpecialCharsFromSting(linesArray[i-2]) ? reqObj.name = linesArray[i-2] : '';
+        !reqObj.name && linesArray[i-3] && removeAllSpecialCharsFromSting(linesArray[i-3]) ? reqObj.name = linesArray[i-3] : '';
+      }
     }
 
     if(
