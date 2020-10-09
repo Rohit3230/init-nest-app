@@ -128,7 +128,7 @@ export class AppService {
             delete responseObj.isValidated;
             res.status(HttpStatus.BAD_REQUEST).json({
               status: "BAD_REQUEST",
-              message: 'Not getting all reuired values from uploaded '+fileType+'. It can be invalid file. Please check and upload again.',
+              message: 'Not getting all required values from uploaded '+fileType+' file. It can be invalid file. Please check and upload again.',
               result: responseObj
             });
           }

@@ -573,8 +573,11 @@ export const getPassportData = function (linesArray: any): any {
 
 export const getDrivingLicenceData = function (linesArray: any): any {
   console.log('INIT getDrivingLicenceData***', linesArray);
-  let reqObj: any = { ifsc: null, accNum: null, bankName: null };
+  let reqObj: any = { name: null, address: null, mobileNumber: null, dob:null, drivingLicenceNumber:null, issuedOn:null };
   console.log('reqObj***', reqObj);
+
+  
+
   return reqObj;
 }
 
