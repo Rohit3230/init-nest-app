@@ -5,6 +5,20 @@
 //   // }
 // }
 
+let removeDupsPartOfString = function(reqString){
+  let textArr = reqString.split(' ');
+  let selectedString : string = '';
+  for(var i=0;i<=textArr.length-1; i++){
+    // console.log('****', textArr[i], selectedString.indexOf(textArr[i]), selectedString.indexOf(textArr[i]) == -1);
+    if(
+      selectedString.indexOf(textArr[i]) == -1
+    ){
+      selectedString = (selectedString ? selectedString : '')+' '+textArr[i];
+    }
+  }
+  return selectedString;
+}
+
 let doesStringContainingAnyDate = function(reqString){
   console.log('INIT doesStringContainingAnyDate****', reqString);
   var splitBySpace = reqString.split(' ');
@@ -32,7 +46,6 @@ let removeAllSpecialCharsFromSting = function (reqString: string) {
   reqString = reqString.replace(/[&\/\\#,+()$~%.'":*?<>{}_]/g, '');
   return reqString;
 }
-
 
 export const getCheckData = function (linesArray: any): any {
   console.log('INIT util fun getCheckData***', linesArray);
@@ -309,6 +322,18 @@ export const getAadharData = function (linesArray: any): any {
 
     }
     // console.log('fullImgAddressContainingStrInd****',fullImgAddressContainingStrInd);
+  }
+
+  if(
+    reqObj
+    &&
+    reqObj.address
+    &&
+    reqObj.address.length
+  ){
+    reqObj.address = removeDupsPartOfString(reqObj.address);
+    // reqObj.address = (reqObj.address).split(':')[1];
+    
   }
 
   console.log('reqObj****', reqObj);

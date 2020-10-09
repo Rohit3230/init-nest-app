@@ -56,11 +56,13 @@ export class AppService {
       //     console.log("1 error:",error.message);
       //   });
       let filesDataArr= [];
+      let recognizedTextArr : any = [];
       let callMe = async function (files : any) {
         for(const file of files){
           const result = await tesseract.recognize(file.path, config);
           console.log('callMe function:- result:- ', result);
           let linesArray = result.split('\n');
+          recognizedTextArr = recognizedTextArr.concat(linesArray);
           let responseObj : any;
           switch (fileType) {
             case 'aadhar':
@@ -122,14 +124,16 @@ export class AppService {
             res.status(HttpStatus.OK).json({
               status: "OK",
               message: "OK",
-              result: responseObj
+              result: responseObj,
+              recognizedTextArr : recognizedTextArr
             });
           }else{
             delete responseObj.isValidated;
             res.status(HttpStatus.BAD_REQUEST).json({
               status: "BAD_REQUEST",
-              message: 'Not getting all required values from uploaded '+fileType+' file. It can be invalid file. Please check and upload again.',
-              result: responseObj
+              message: 'Invalid file. Please check and upload again.',
+              result: responseObj,
+              recognizedTextArr : recognizedTextArr
             });
           }
 
