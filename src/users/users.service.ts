@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { query } from 'express';
+import { Repository, Connection, QueryRunner } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
 
@@ -9,6 +10,8 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    private connection: Connection,
+    // private queryRunner: QueryRunner
   ) {}
 
   create(createUserDto: CreateUserDto): Promise<User> {
@@ -19,13 +22,60 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
+  async createMany(users: User[]) {
+    console.log('createMany*****',users);
+    const queryRunner = this.connection.createQueryRunner();
+  
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.manager.save(users[0]);
+      // await queryRunner.manager.save(users[1]);
+  
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      // since we have errors lets rollback the changes we made
+      await queryRunner.rollbackTransaction();
+    } finally {
+      // you need to release a queryRunner which was manually instantiated
+      await queryRunner.release();
+    }
+  }
+
   async findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+
+    let queryString : string;
+    // queryString = 'select * from user';
+    // queryString = 'SELECT * FROM `manage_chat_bot` as mCB jOIN chat_bot as cB on cB.id = mCB.quesId';
+    // queryString = 'INSERT INTO `user`(`firstName`, `lastName`, `age`) VALUES (?,?,?)';
+    queryString = 'select * from user where age>=?';
+
+    let params=[];
+    params = [20];
+    
+    console.log('Query***',queryString,'***Pparams***',params);
+    const users = await this.usersRepository.query(queryString, params);
+    console.log('Found users*****', users);
+    
+    // const usersArr = this.queryRunner.query(`select * from user`);
+    // console.log('Found usersArr*****', JSON.stringify(usersArr));
+
+    return this.usersRepository.find(); 
   }
 
   findOne(id: string): Promise<User> {
     return this.usersRepository.findOne(id);
   }
+
+  async getUser(_id: number): Promise<User[]> {
+    const userObj = await this.usersRepository.find({
+        select: ["firstName", "lastName"],
+        // from: ["users"],
+        where: [{ "id": _id }]
+    });
+    console.log('user****',userObj);
+    return userObj; 
+}
 
   async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);

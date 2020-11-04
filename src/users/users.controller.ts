@@ -7,9 +7,19 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  // @Post()
+  // create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  //   return this.usersService.create(createUserDto);
+  // }
+
   @Post()
-  create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.create(createUserDto);
+  create(@Body() createUserDto: CreateUserDto){
+    let createdUser = this.usersService.create(createUserDto).then(respData=>{
+      console.log('respData****', respData);  
+      return respData;
+    });
+    console.log('createdUser****', createdUser);
+    // return createdUser;
   }
 
   @Get()
@@ -17,10 +27,15 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  // @Get(':id')
+  // findOne(@Param('id') id: string): Promise<User> {
+  //   return this.usersService.findOne(id);
+  // }
+
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<User> {
-    return this.usersService.findOne(id);
-  }
+    get(@Param() params) {
+        return this.usersService.getUser(params.id);
+    }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() createUserDto: CreateUserDto): Promise<User> {

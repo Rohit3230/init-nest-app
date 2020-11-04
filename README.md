@@ -25,44 +25,9 @@
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
+This repository cntain code of a NodeJs application using NestJs with LazyLoad Functionality.<br>
+In this reposity we are using MongoDB without using any typeorm so that we can use our own custom query for perform operation.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
 ## Stay in touch
 
@@ -70,73 +35,6 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 - Website - [https://nestjs.com](https://nestjs.com/)
 - Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
-
-  Nest is [MIT licensed](LICENSE).
-
-
-## IMP Thing to know
-
-  Source From:-
-  <br>
-    https://docs.nestjs.com/recipes/hot-reload
-
-****************************************
-  For Apply Hot-Reload functionality Follow below points:
-   Install Required packages by following command.
-<br>
-   npm i --save-dev webpack-node-externals start-server-webpack-plugin
-
-****************************************
-  Create a new file named with: webpack-hmr.config.js with below code: 
-  <br>
-    const webpack = require('webpack');
-    const nodeExternals = require('webpack-node-externals');
-    const StartServerPlugin = require('start-server-webpack-plugin');
-
-    module.exports = function(options) {
-      return {
-        ...options,
-        entry: ['webpack/hot/poll?100', options.entry],
-        watch: true,
-        externals: [
-          nodeExternals({
-            allowlist: ['webpack/hot/poll?100'],
-          }),
-        ],
-        plugins: [
-          ...options.plugins,
-          new webpack.HotModuleReplacementPlugin(),
-          new webpack.WatchIgnorePlugin([/\.js$/, /\.d\.ts$/]),
-          new StartServerPlugin({ name: options.output.filename }),
-        ],
-      };
-    };
-
-
-
-****************************************
-    Add Code in main.ts file:-
-<br>
-    declare const module: any;
-
-    async function bootstrap() {
-      const app = await NestFactory.create(AppModule);
-      await app.listen(3000);
-
-      if (module.hot) {
-        module.hot.accept();
-        module.hot.dispose(() => app.close());
-      }
-    }
-    bootstrap();
-
-****************************************
-    change in package.json file:-
-<br>
-    "start:dev": "nest build --webpack --webpackPath webpack-hmr.config.js"
-
-****************************************
     Use command:
 <br>
     npm run start:dev
