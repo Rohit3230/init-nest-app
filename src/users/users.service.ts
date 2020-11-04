@@ -45,18 +45,58 @@ export class UsersService {
   async findAll(): Promise<User[]> {
 
     let queryString : string;
-    // queryString = 'select * from user';
+    queryString = 'select * from user';
     // queryString = 'SELECT * FROM `manage_chat_bot` as mCB jOIN chat_bot as cB on cB.id = mCB.quesId';
     // queryString = 'INSERT INTO `user`(`firstName`, `lastName`, `age`) VALUES (?,?,?)';
-    queryString = 'select * from user where age>=?';
+    // queryString = 'select * from user where age>=?';
 
-    let params=[];
-    params = [20];
+    let params: any = [];
+    // params = [20];
+    // params = ['Sourya', 'Niranjan', 12];
     
     console.log('Query***',queryString,'***Pparams***',params);
-    const users = await this.usersRepository.query(queryString, params);
-    console.log('Found users*****', users);
-    
+    // const users = await this.connection.query(queryString, params);
+    // console.log('Found users*****', users); 
+    const queryRunner = this.connection.createQueryRunner();
+    let users:any;
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+
+      console.log('INIT INSERT 1****', await queryRunner.query(queryString, params));
+      await queryRunner.query('INSERT INTO `user`(`firstName`, `lastName`, `age`) VALUES (?,?,?)', ['a','b',30])
+      console.log('INIT INSERT 2****', await queryRunner.query(queryString, params));
+      await queryRunner.query('INSERT INTO `user`(`firstName`, `lastName`, `age`) VALUES (?,?,?)', ['aa','bb',30])
+      // console.log('INIT INSERT 3****', await queryRunner.query(queryString, params));
+      // await queryRunner.query('INSERT INTO `users`(`firstNames`, `lastName`, `age`) VALUES (?,?,?)', ['aaa','bbb',30])
+      
+
+      console.log('INIT FOR FINDING USERS****', queryString, params);
+      users = await this.connection.query(queryString, params);
+
+      console.log('Found users*****', users); 
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      // since we have errors lets rollback the changes we made
+      console.log('catchState****', err);
+      await queryRunner.rollbackTransaction();
+    } finally {
+      // you need to release a queryRunner which was manually instantiated
+      console.log('finallyState****');
+      await queryRunner.release();
+      return users;
+    }
+
+
+
+
+
+
+
+
+
+
+
     // const usersArr = this.queryRunner.query(`select * from user`);
     // console.log('Found usersArr*****', JSON.stringify(usersArr));
 
